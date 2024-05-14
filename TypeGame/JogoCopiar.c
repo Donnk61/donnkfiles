@@ -3,7 +3,7 @@
 #include <time.h>
 #include <Windows.h>
 
-char comparar_string(char *str_resultado, char *string_digitada, int tempo, int qnt_palavra, int score){
+char comparar_string(char *str_resultado, char *string_digitada, int score, int *modos){
     int i;
 
     for (i=0; str_resultado[i] != '\0'; i++){
@@ -16,14 +16,17 @@ char comparar_string(char *str_resultado, char *string_digitada, int tempo, int 
             printf("| | |_ |/ _` | '_ ` _ \\ / _ \\ | |  | \\ \\ / / _\\ '__/ \n");
             printf("| |__| | (_| | | | | | |  __/ | |__| |\\ V /  __/ |    \n");
             printf("\\_____|\\__,_|_| |_| |_|\\___|   \\____/  \\_/\\___|_|    \n\n");
-            printf("SCORE: %d    TEMPO: %d   QNT_PALAVRAS: %d\n", score-1, tempo, qnt_palavra);
+            printf("SCORE: %d    TEMPO: %d   QNT_PALAVRAS: %d\n", score-1, modos[0], modos[1]);
             if(score-1 < 3)
                 printf("Habilidade: Iniciante\n");
             if(score-1 >= 3 && score-1 < 6)
                 printf("Habilidade: Intermediario\n");
             if(score-1 >= 6)
-                printf("Habilidade: MESTRE DO TYPEGAME!\n");
+                printf("\nHabilidade: MESTRE DO TYPEGAME!\n");
 
+            printf("-----------------------------\n");
+            printf("String Correta: %s\nSua String: %s\n", str_resultado, string_digitada);
+            printf("-----------------------------\n");
             return 0;
         }
         // printf("Igual %c - %c\n", str_resultado[i], string_digitada[i]);
@@ -73,11 +76,44 @@ char *gerar_palavra(int qnt_palavra, char *str_resultado){
     return str_resultado;
 }
 
+int *Modo_De_Jogo(int tempo, int qnt_palavra, int *modos){
+    int selecionar;
+    //modo[0] = tempo    modo[1] = qnt_palavra
+    printf("Selecione o modo de jogo:\n1 - Progressao (tmp=10, qnt_palavras=2)\n2 - CUSTOM\n");
+    scanf("%d", &selecionar);
+
+    switch(selecionar){
+        case 1 : 
+            system("cls");
+            printf("Modo de jogo 'PROGRESSAO' definido!\n\n");
+            printf("----' Jogo comeca em 5 segs!! '----");
+            modos[0] = 8;
+            modos[1] = 2;
+            Sleep(5000);
+            break;
+        case 2 : 
+            system("cls");
+            printf("Configuracoes do modo 'CUSTOM'!\n\n"); 
+            printf("Qnts de palavras desejadas: ");
+            scanf("%d", &modos[1]);
+            printf("Digite o tempo desejado: ");
+            scanf("%d", &modos[0]);
+            system("cls");
+            printf("Modo de jogo 'CUSTOM' definido!\n"); 
+            printf("---' Jogo comeca em 5 segs!! '---");
+            Sleep(5000);
+            break;
+        default :  printf("ARGUMENTO ERRADO!"); return 0;
+    }
+    return modos;
+}
+
 void main(){
-    int qnt_palavra, i, tempo, score=0;
+    int qnt_palavra, i, tempo, score=0, modos[1+1];
     char str_resultado[5*20+1], str_digitada[5*20+1];
     char *ptr_resultado = str_resultado;
     char *ptr_digitada = str_digitada;
+    int *ptr_modos = modos;
 
     char LINHA[] = "-----------------------------\n";
 
@@ -85,14 +121,10 @@ void main(){
     printf("------- ' TypeGame ' --------\n");
     printf("%s\n", LINHA);
 
-    printf("Digite a qnt de palavras: ");
-    scanf("%d", &qnt_palavra);
-
-    printf("\nDigite o tempo desejado: ");
-    scanf("%d", &tempo);
+    Modo_De_Jogo(tempo, qnt_palavra, ptr_modos);
 
     do{
-        gerar_palavra(qnt_palavra, ptr_resultado);
+        gerar_palavra(modos[1], ptr_resultado);
 
         system("cls");
 
@@ -101,18 +133,22 @@ void main(){
             printf("%c", str_resultado[i]);
 
         printf("\n\nSEGUNDOS RESTANTES:\n ");
-        for (i=tempo; i>0; i--){
+        for (i=modos[0]; i>0; i--){
             printf("\r%d", i);
             Sleep(1000);
         }
 
-        system("cls");
+       system("cls");
 
         fflush(stdin);
         printf("\nDigite a string:\n");
         fgets(str_digitada, sizeof(str_digitada), stdin);
 
-        system("cls");
+        if (modos[0]!=2 && modos[1]!=8){
+            modos[0] -= 1;
+            modos[1] += 1;
+        }   
         score += 1;
-    } while(comparar_string(ptr_resultado, ptr_digitada, tempo, qnt_palavra, score) == 1);
+        system("cls");
+    } while(comparar_string(ptr_resultado, ptr_digitada, score, ptr_modos) == 1);
 }
