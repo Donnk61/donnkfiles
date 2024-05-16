@@ -3,11 +3,13 @@
 #include <time.h>
 #include <Windows.h>
 
+//Ler um arquivo com muitas palavras e usar elas no código, fazer para tocar um beep no cronometro
+
 char comparar_string(char *str_resultado, char *string_digitada, int score, int *modos){
     int i;
 
-    for (i=0; string_digitada[i] != '\0'; i++){
-        if (str_resultado[i] != string_digitada[i]){
+    for (i=0;str_resultado[i] != '\0'; i++){        
+        if (string_digitada[i] != str_resultado[i]){
             // printf("Nao igual %c - %c\n", str_resultado[i], string_digitada[i]);
 
             printf(" _____                          ____                   \n");
@@ -128,7 +130,7 @@ int *Modo_De_Jogo(int tempo, int qnt_palavra, int *modos){
             system("cls");
             printf("Modo de jogo 'CUSTOM' definido!\n"); 
             printf("---' Jogo comeca em 5 segs!! '---");
-            Sleep(5000);
+            Sleep(1000);
             break;
         default :  printf("ARGUMENTO ERRADO!"); return 0;
     }
@@ -142,10 +144,16 @@ void main(){
     char *ptr_digitada = str_digitada;
     int *ptr_modos = modos;
 
-    char LINHA[] = "-----------------------------\n";
-
-    printf("----- ' Bem-Vindo ao: ' -----\n");
-    printf("------- ' TypeGame ' --------\n");
+    char LINHA[] = "-----------------------------------------------------------------------\n";
+    
+    printf("%s\n", LINHA);
+    printf(" ______  __    __  ____    ____    ____    ______           ____      \n");
+    printf("/\\__  _\\/\\ \\  /\\ \\/\\  _`\\ /\\  _`\\ /\\  _`\\ /\\  _  \\  /'\\_/`\\/\\  _`\\    \n");
+    printf("\\/_/\\ \\/\\ \\`\\\\/'/\\ \\ \\L\\ \\ \\ \\L\\_\\ \\ \\L\\_\\ \\ \\L\\ \\/\\      \\ \\ \\L\\_\\  \n");
+    printf("   \\ \\ \\ \\`\\ /'  \\ \\ ,__\\/\\ \\  _\\/\\ \\ \\L_L\\ \\  __ \\ \\ \\__\\ \\ \\  _\\L  \n");
+    printf("    \\ \\ \\ \\ `\\ \\   \\ \\ \\/  \\ \\ \\L\\ \\ \\ \\/, \\ \\ \\/\\ \\ \\ \\_/\\ \\ \\ \\L\\ \\ \n");
+    printf("     \\ \\_\\ \\_\\ \\_\\   \\ \\_\\   \\ \\____/\\ \\____/\\ \\_\\ \\_\\ \\_\\\\ \\_\\ \\____/ \n");
+    printf("      \\/_/\\/_/\\/_/    \\/_/    \\/___/  \\/___/  \\/_/\\/_/\\/_/ \\/_/\\___/  \n");
     printf("%s\n", LINHA);
     
     Modo_De_Jogo(tempo, qnt_palavra, ptr_modos);
