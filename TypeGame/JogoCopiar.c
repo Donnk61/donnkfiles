@@ -6,7 +6,7 @@
 char comparar_string(char *str_resultado, char *string_digitada, int score, int *modos){
     int i;
 
-    for (i=0; str_resultado[i] != '\0'; i++){
+    for (i=0; string_digitada[i] != '\0'; i++){
         if (str_resultado[i] != string_digitada[i]){
             // printf("Nao igual %c - %c\n", str_resultado[i], string_digitada[i]);
 
@@ -35,29 +35,49 @@ char comparar_string(char *str_resultado, char *string_digitada, int score, int 
     return 1;
 }
 
-int *escolher_palavra(int qnt_palavra, int *num_aleatorio){
+int *escolher_palavra(int qnt_palavra, int *num_aleatorio, int modos[]){
     srand(time(NULL));
     int i;
-
-    for (i=0; i<qnt_palavra; i++){    
-        num_aleatorio[i] = rand() % 5;  
+    if (modos[2]==1){
+        for (i=0; i<qnt_palavra; i++){    
+            num_aleatorio[i] = rand() % 5;  
+        }
+    } 
+    if(modos[2]==2){
+        for (i=0; i<qnt_palavra; i++){
+            do{    
+                num_aleatorio[i] = rand() % 10;
+            }while(num_aleatorio[i]<4);
+            printf("%d", num_aleatorio[i]);
+        }
     }
+    if (modos[2]==3){
+        for (i=0; i<qnt_palavra; i++){    
+            num_aleatorio[i] = rand() % 10;  
+        }
+    } 
     return num_aleatorio;
 }
 
-char *gerar_palavra(int qnt_palavra, char *str_resultado){
+char *gerar_palavra(int qnt_palavra, char *str_resultado, int modos[]){
     int i, j, x, num_aleatorio[200];
     int *ptr = num_aleatorio;
 
-    char palavras[5][20] = {
+    char palavras[10][20+1] = {
         {'P','o','v','o'},
         {'B','r','a','s','i','l','e','i','r','o'},
         {'P','e','s','s','o','a'},
         {'P','a','i','s'},
-        {'I','n','d','i','g','e','n','a'}
+        {'I','n','d','i','g','e','n','a'},
+    // ----------------------------------------- 
+        {'Q','u','a','d','r','o'},
+        {'P','r','o','f','e','s','s','o','r'},
+        {'P','i','n','c','e','l'},
+        {'M','e','s','a'},
+        {'A','l','u','n','o'}
     };
     
-    escolher_palavra(qnt_palavra, ptr);    
+    escolher_palavra(qnt_palavra, ptr, modos);    
 
     /*
     for(i=0; i<qnt_palavra; i++){        
@@ -77,22 +97,29 @@ char *gerar_palavra(int qnt_palavra, char *str_resultado){
 }
 
 int *Modo_De_Jogo(int tempo, int qnt_palavra, int *modos){
-    int selecionar;
-    //modo[0] = tempo    modo[1] = qnt_palavra
-    printf("Selecione o modo de jogo:\n1 - Progressao (tmp=10, qnt_palavras=2)\n2 - CUSTOM\n");
-    scanf("%d", &selecionar);
+    int selecionar, falso=0;
+    //modo[0] = tempo    modo[1] = qnt_palavra    modo[2] = tema
+    do{
+        falso=1;
+        printf("Selecione o modo de jogo:\n1 - Endless \n2 - CUSTOM\n");
+        scanf("%d", &selecionar);
+        printf("Selecione o tema do jogo:\n1 - Brasil\n2 - Escola\n3 - TODOS\n");
+        scanf("%d", &modos[2]);
+        system("cls");
+        if (selecionar>2 || selecionar<0 || modos[2]>3 || modos[2]<0){
+            falso=0;
+        }
+    }while(falso==0);
 
     switch(selecionar){
         case 1 : 
-            system("cls");
-            printf("Modo de jogo 'PROGRESSAO' definido!\n\n");
+            printf("Modo de jogo 'ENDLESS' definido!\n\n");
             printf("----' Jogo comeca em 5 segs!! '----");
             modos[0] = 8;
             modos[1] = 2;
             Sleep(5000);
             break;
         case 2 : 
-            system("cls");
             printf("Configuracoes do modo 'CUSTOM'!\n\n"); 
             printf("Qnts de palavras desejadas: ");
             scanf("%d", &modos[1]);
@@ -109,7 +136,7 @@ int *Modo_De_Jogo(int tempo, int qnt_palavra, int *modos){
 }
 
 void main(){
-    int qnt_palavra, i, tempo, score=0, modos[1+1];
+    int qnt_palavra, i, tempo, score=0, modos[2+1];
     char str_resultado[5*20+1], str_digitada[5*20+1];
     char *ptr_resultado = str_resultado;
     char *ptr_digitada = str_digitada;
@@ -120,11 +147,11 @@ void main(){
     printf("----- ' Bem-Vindo ao: ' -----\n");
     printf("------- ' TypeGame ' --------\n");
     printf("%s\n", LINHA);
-
+    
     Modo_De_Jogo(tempo, qnt_palavra, ptr_modos);
 
     do{
-        gerar_palavra(modos[1], ptr_resultado);
+        gerar_palavra(modos[1], ptr_resultado, modos);
 
         system("cls");
 
