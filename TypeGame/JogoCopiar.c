@@ -2,40 +2,39 @@
 #include <stdlib.h>
 #include <time.h>
 #include <Windows.h>
+//ASCII 3D
+//modo[0] = tempo    modo[1] = qnt_palavra    modo[2] = tema    modo[3] = jogar dnv
 
-//Ler um arquivo com muitas palavras e usar elas no código, fazer para tocar um beep no cronometro
+//Menu interativo
+//Ver se é possível add música
+//Salvar pontuação/Tabela de Ranking/Jogar novamente
 
-char comparar_string(char *str_resultado, char *string_digitada, int score, int *modos){
-    int i;
+int comparar_string(char *str_resultado, char *string_digitada){
+    int i, continuar;
 
     for (i=0;str_resultado[i] != '\0'; i++){        
         if (string_digitada[i] != str_resultado[i]){
             // printf("Nao igual %c - %c\n", str_resultado[i], string_digitada[i]);
-
-            printf(" _____                          ____                   \n");
-            printf("/ ____|                        / __ \\                 \n");
-            printf("| |  __  __ _ _ __ ___   ___  | |  | |_   _____ _ __   \n");
-            printf("| | |_ |/ _` | '_ ` _ \\ / _ \\ | |  | \\ \\ / / _\\ '__/ \n");
-            printf("| |__| | (_| | | | | | |  __/ | |__| |\\ V /  __/ |    \n");
-            printf("\\_____|\\__,_|_| |_| |_|\\___|   \\____/  \\_/\\___|_|    \n\n");
-            printf("SCORE: %d    TEMPO: %d   QNT_PALAVRAS: %d\n", score-1, modos[0], modos[1]);
-            if(score-1 < 3)
-                printf("Habilidade: Iniciante\n");
-            if(score-1 >= 3 && score-1 < 6)
-                printf("Habilidade: Intermediario\n");
-            if(score-1 >= 6)
-                printf("\nHabilidade: MESTRE DO TYPEGAME!\n");
-
-            printf("-----------------------------\n");
-            printf("String Correta: %s\nSua String: %s\n", str_resultado, string_digitada);
-            printf("-----------------------------\n");
+            system("cls");
+            printf("-------------------------------------------------[ ]: ]-----------------------------------------------\n");
+            printf("                 ________         ______                ______           \n");
+            printf("                |\\  _____\\       |\\___   \\  ___        |\\___   \\  ___    \n");
+            printf("                \\ \\  \\__/        \\|___|\\  \\|\\__\\       \\|___|\\  \\|\\__\\   \n");
+            printf("                 \\ \\   __\\            \\ \\  \\|__|            \\ \\  \\|__|   \n");
+            printf("                  \\ \\  \\_|            _\\_\\  \\  ___          _\\_\\  \\  ___ \n");
+            printf("                   \\ \\__\\            |\\______\\|\\__\\        |\\______\\|\\__\\\n");
+            printf("                    \\|__|            \\|______|\\|__|        \\|______|\\|__|\n");           
+            printf("--------------------------------------------[ VOCE PERDEU ]-------------------------------------------\n"); 
+            Beep(450, 500); Beep(375, 500); Beep(300, 2000);
+            system("cls");
             return 0;
         }
+        break;
         // printf("Igual %c - %c\n", str_resultado[i], string_digitada[i]);
     }
     //printf("1");
     return 1;
-}
+} 
 
 int *escolher_palavra(int qnt_palavra, int *num_aleatorio, int modos[]){
     srand(time(NULL));
@@ -50,7 +49,7 @@ int *escolher_palavra(int qnt_palavra, int *num_aleatorio, int modos[]){
             do{    
                 num_aleatorio[i] = rand() % 10;
             }while(num_aleatorio[i]<4);
-            printf("%d", num_aleatorio[i]);
+            //printf("%d", num_aleatorio[i]);
         }
     }
     if (modos[2]==3){
@@ -92,98 +91,233 @@ char *gerar_palavra(int qnt_palavra, char *str_resultado, int modos[]){
             //printf("%c", palavras[indice][j]);
             str_resultado[x] = palavras[indice][j];
         }
+            str_resultado[x] = ' ';
+            x++;
     }
-    str_resultado[x] = '\0';
-
+        if (x > 0 && str_resultado[x-1] == ' '){
+            str_resultado[x-1] = '\0';
+        }
     return str_resultado;
 }
 
 int *Modo_De_Jogo(int tempo, int qnt_palavra, int *modos){
-    int selecionar, falso=0;
-    //modo[0] = tempo    modo[1] = qnt_palavra    modo[2] = tema
+    int selecionar, falso=0, i;
     do{
         falso=1;
-        printf("Selecione o modo de jogo:\n1 - Endless \n2 - CUSTOM\n");
+        printf("                                   [* SELECIONE O -MODO- DE JOGO *]\n");
+        printf("                                     1 - Endless   |   2 - CUSTOM\n\n");
         scanf("%d", &selecionar);
-        printf("Selecione o tema do jogo:\n1 - Brasil\n2 - Escola\n3 - TODOS\n");
-        scanf("%d", &modos[2]);
-        system("cls");
-        if (selecionar>2 || selecionar<0 || modos[2]>3 || modos[2]<0){
+        if (selecionar>2 || selecionar<0){
             falso=0;
+            printf("                                      MODO DE JOGO INVALIDO!!\n\n");
         }
+
     }while(falso==0);
+
+    do{
+        falso=1;
+        printf("                                   [* SELECIONE O -TEMA- DO JOGO *]\n");
+        printf("                      1 - Brasil   |   2 - Escola   |   3 - TODOS   |   (4-sair)\n");
+        scanf("%d", &modos[2]);
+        if (modos[2]>4 || modos[2]<0){
+            falso=0;
+            printf("                                      TEMA DO JOGO INVALIDO!!\n\n");
+        }
+        if (modos[2]==4){
+            return 0;
+        }
+
+    }while(falso==0);
+    system("cls");
 
     switch(selecionar){
         case 1 : 
-            printf("Modo de jogo 'ENDLESS' definido!\n\n");
-            printf("----' Jogo comeca em 5 segs!! '----");
+            printf("--------------------------------------[* MODO DE JOGO DEFINDO *]--------------------------------------\n");
+            printf("             _______   ________   ________  ___       _______   ________   ________      \n");
+            printf("            |\\  ___ \\ |\\   ___  \\|\\   ___ \\|\\  \\     |\\  ___ \\ |\\   ____\\ |\\   ____\\     \n");
+            printf("            \\ \\   __/|\\ \\  \\\\ \\  \\ \\  \\_|\\ \\ \\  \\    \\ \\   __/|\\ \\  \\___|_\\ \\  \\___|_    \n");
+            printf("             \\ \\  \\_|/_\\ \\  \\\\ \\  \\ \\  \\\\\\ \\ \\  \\    \\ \\  \\_|/_\\ \\_____  \\\\ \\_____  \\   \n");
+            printf("              \\ \\  \\_|\\ \\ \\  \\\\ \\  \\ \\  \\\\\\ \\ \\  \\____\\ \\  \\_|\\ \\|____|\\  \\\\|____|\\  \\  \n");
+            printf("               \\ \\_______\\ \\__\\\\ \\__\\ \\_______\\ \\_______\\ \\_______\\____\\_\\  \\ ____\\_\\  \\ \n");
+            printf("                \\|_______|\\|__| \\|__|\\|_______|\\|_______|\\|_______|\\_________\\\\_________\\\n");
+            printf("                                                                  \\|_________\\|_________|\n");
+            printf("-----------------------------------[* JOGO COMECA EM 5 SEGUNDOS!! *]----------------------------------\n");
+
             modos[0] = 8;
             modos[1] = 2;
-            Sleep(5000);
+            for(i=0; i<5; i++){
+                if (i==4){
+                    Beep(400,2000);
+                    continue;
+                }
+                else
+                    Beep(250,500);
+                Sleep(1000);
+            }
             break;
         case 2 : 
-            printf("Configuracoes do modo 'CUSTOM'!\n\n"); 
-            printf("Qnts de palavras desejadas: ");
+            printf("--------------------------------------[* MODO DE JOGO DEFINDO *]--------------------------------------\n");
+            printf("             ________  _______  _________  _________  ___  ________   ________  ________      \n");
+            printf("            |\\   ____\\|\\  ___ \\|\\___   ___\\\\___   ___\\\\  \\|\\   ___  \\|\\   ____\\|\\   ____\\     \n");
+            printf("            \\ \\  \\___|\\ \\   __/\\|___ \\  \\_\\|___ \\  \\_\\ \\  \\ \\  \\\\ \\  \\ \\  \\___|\\ \\  \\___|_    \n");
+            printf("             \\ \\_____  \\ \\  \\_|/__  \\ \\  \\     \\ \\  \\ \\ \\  \\ \\  \\\\ \\  \\ \\  \\  __\\ \\_____  \\   \n");
+            printf("              \\|____|\\  \\ \\  \\_|\\ \\  \\ \\  \\     \\ \\  \\ \\ \\  \\ \\  \\\\ \\  \\ \\  \\|\\  \\|____|\\  \\  \n");
+            printf("                ____\\_\\  \\ \\_______\\  \\ \\__\\     \\ \\__\\ \\ \\__\\ \\__\\\\ \\__\\ \\_______\\____\\_\\  \\ \n");
+            printf("               |\\_________\\|_______|   \\|__|      \\|__|  \\|__|\\|__| \\|__|\\|_______|\\_________\\\n");
+            printf("               \\|_________|                                                       \\|_________|\n");
+            printf("------------------------------------------[* CONFIGURACOES *]-----------------------------------------\n");
+
+            printf("                                   [* QUANTAS -PALAVRAS- DESEJA? *]\n");
             scanf("%d", &modos[1]);
-            printf("Digite o tempo desejado: ");
+            printf("                                     [* QUANTO -TEMPO- DESEJA? *]\n");
             scanf("%d", &modos[0]);
-            system("cls");
-            printf("Modo de jogo 'CUSTOM' definido!\n"); 
-            printf("---' Jogo comeca em 5 segs!! '---");
-            Sleep(1000);
+            printf("-----------------------------------[* JOGO COMECA EM 5 SEGUNDOS!! *]----------------------------------\n");
+            for(i=0; i<5; i++){
+                if (i==4){
+                    Beep(400,2000);
+                    continue;
+                }
+                else
+                    Beep(250,500);
+                Sleep(1000);
+            }
             break;
         default :  printf("ARGUMENTO ERRADO!"); return 0;
     }
     return modos;
 }
 
-void main(){
-    int qnt_palavra, i, tempo, score=0, modos[2+1];
-    char str_resultado[5*20+1], str_digitada[5*20+1];
+int main(){
+    int qnt_palavra, i, tempo, score=0, modos[3+1], duracao=550, continuar, speed=250;
+    char str_resultado[5*20+1], str_digitada[5*20+1], fim;
     char *ptr_resultado = str_resultado;
     char *ptr_digitada = str_digitada;
     int *ptr_modos = modos;
 
-    char LINHA[] = "-----------------------------------------------------------------------\n";
-    
-    printf("%s\n", LINHA);
-    printf(" ______  __    __  ____    ____    ____    ______           ____      \n");
-    printf("/\\__  _\\/\\ \\  /\\ \\/\\  _`\\ /\\  _`\\ /\\  _`\\ /\\  _  \\  /'\\_/`\\/\\  _`\\    \n");
-    printf("\\/_/\\ \\/\\ \\`\\\\/'/\\ \\ \\L\\ \\ \\ \\L\\_\\ \\ \\L\\_\\ \\ \\L\\ \\/\\      \\ \\ \\L\\_\\  \n");
-    printf("   \\ \\ \\ \\`\\ /'  \\ \\ ,__\\/\\ \\  _\\/\\ \\ \\L_L\\ \\  __ \\ \\ \\__\\ \\ \\  _\\L  \n");
-    printf("    \\ \\ \\ \\ `\\ \\   \\ \\ \\/  \\ \\ \\L\\ \\ \\ \\/, \\ \\ \\/\\ \\ \\ \\_/\\ \\ \\ \\L\\ \\ \n");
-    printf("     \\ \\_\\ \\_\\ \\_\\   \\ \\_\\   \\ \\____/\\ \\____/\\ \\_\\ \\_\\ \\_\\\\ \\_\\ \\____/ \n");
-    printf("      \\/_/\\/_/\\/_/    \\/_/    \\/___/  \\/___/  \\/_/\\/_/\\/_/ \\/_/\\___/  \n");
-    printf("%s\n", LINHA);
-    
-    Modo_De_Jogo(tempo, qnt_palavra, ptr_modos);
-
     do{
-        gerar_palavra(modos[1], ptr_resultado, modos);
-
-        system("cls");
-
-        printf("------> Decore o texto <-----\n\n");
-        for (i=0; str_resultado[i] != '\0'; i++)
-            printf("%c", str_resultado[i]);
-
-        printf("\n\nSEGUNDOS RESTANTES:\n ");
-        for (i=modos[0]; i>0; i--){
-            printf("\r%d", i);
-            Sleep(1000);
+        printf("\n");
+        char bemvindo[14+1] = {'B','e','m','-','v','i','n','d','o','s',' ','a','o',':'};
+        for(i=0; bemvindo[i] != '\0'; i++){
+            printf("%c", bemvindo[i]);
+            Beep(300, speed);
+            Sleep(speed);
         }
 
-       system("cls");
+        printf("----------------------------------------------------------------------------------------\n"); Sleep(speed);    
+        printf(" _________    ___    ___ ________  _______           ________  ________  _____ ______   _______      \n"); Sleep(speed);
+        printf("|\\___   ___\\ |\\  \\  /  /|\\   __  \\|\\  ___ \\         |\\   ____\\|\\   __  \\|\\   _ \\  _   \\|\\  ___ \\     \n"); Sleep(speed);
+        printf("\\|___ \\  \\_| \\ \\  \\/  / | \\  \\|\\  \\ \\   __/|        \\ \\  \\___|\\ \\  \\|\\  \\ \\  \\\\\\__\\ \\  \\ \\   __/|    \n"); Sleep(speed);
+        printf("     \\ \\  \\   \\ \\    / / \\ \\   ____\\ \\  \\_|/__       \\ \\  \\  __\\ \\   __  \\ \\  \\\\|__| \\  \\ \\  \\_|/__  \n"); Sleep(speed);
+        printf("      \\ \\  \\   \\/  /  /   \\ \\  \\___|\\ \\  \\_|\\ \\       \\ \\  \\|\\  \\ \\  \\ \\  \\ \\  \\    \\ \\  \\ \\  \\_|\\ \\ \n"); Sleep(speed);
+        printf("       \\ \\__\\__/  / /      \\ \\__\\    \\ \\_______\\       \\ \\_______\\ \\__\\ \\__\\ \\__\\    \\ \\__\\ \\_______\\\n"); Sleep(speed);
+        printf("        \\|__|\\___/ /        \\|__|     \\|_______|        \\|_______|\\|__|\\|__|\\|__|     \\|__|\\|_______|\n"); Sleep(speed);
+        printf("            \\|___|/                                                                  \n"); Sleep(speed);
+        printf("------------------------------------------------------------------------------------------------------\n"); Sleep(speed+50);
+        
+        if (Modo_De_Jogo(tempo, qnt_palavra, ptr_modos)==0){
+            return 0;
+        }
 
-        fflush(stdin);
-        printf("\nDigite a string:\n");
-        fgets(str_digitada, sizeof(str_digitada), stdin);
+        do{
+            continuar = 0;
+            gerar_palavra(modos[1], ptr_resultado, modos);
 
-        if (modos[0]!=2 && modos[1]!=8){
-            modos[0] -= 1;
-            modos[1] += 1;
-        }   
-        score += 1;
-        system("cls");
-    } while(comparar_string(ptr_resultado, ptr_digitada, score, ptr_modos) == 1);
+            system("cls");
+            printf("        ________  _______   ________  ________  ________  ________  _________  _______      \n");
+            printf("        |\\   ___ \\|\\  ___ \\ |\\   ____\\|\\   __  \\|\\   __  \\|\\   __  \\|\\___   ___\\\\  ___ \\     \n");
+            printf("        \\ \\  \\_|\\ \\ \\   __/|\\ \\  \\___|\\ \\  \\|\\  \\ \\  \\|\\  \\ \\  \\|\\  \\|___ \\  \\_\\ \\   __/|    \n");
+            printf("         \\ \\  \\ \\\\ \\ \\  \\_|/_\\ \\  \\    \\ \\  \\\\\\  \\ \\   _  _\\ \\   __  \\   \\ \\  \\ \\ \\  \\_|/__  \n");
+            printf("          \\ \\  \\_\\\\ \\ \\  \\_|\\ \\ \\  \\____\\ \\  \\\\\\  \\ \\  \\\\  \\\\ \\  \\ \\  \\   \\ \\  \\ \\ \\  \\_|\\ \\ \n");
+            printf("           \\ \\_______\\ \\_______\\ \\_______\\ \\_______\\ \\__\\\\ _\\\\ \\__\\ \\__\\   \\ \\__\\ \\ \\_______\\\n");
+            printf("            \\|_______|\\|_______|\\|_______|\\|_______|\\|__|\\|__|\\|__|\\|__|    \\|__|  \\|_______|\n");
+            printf("-----------------------------------------[* DECORE O TEXTO! *]----------------------------------------\n\n");
+            for (i=0; str_resultado[i] != '\0'; i++)
+                printf("%c", str_resultado[i]);
+            
+            printf("\n\n\t\t\t\t\t  SEGUNDOS RESTANTES:\n ");
+            for (i=modos[0]; i>0; i--){
+                printf("\r\t\t\t\t\t\t  %d", i);
+                Sleep(1000);
+            }
+
+            system("cls");
+
+            fflush(stdin);
+            printf(" _______   ________   _________  _______   ________          _________  _______      ___    ___ _________   \n");
+            printf("|\\  ___ \\ |\\   ___  \\|\\___   ___\\\\  ___ \\ |\\   __  \\        |\\___   ___\\\\  ___ \\    |\\  \\  /  /|\\___   ___\\ \n");
+            printf("\\ \\   __/|\\ \\  \\\\ \\  \\|___ \\  \\_\\ \\   __/|\\ \\  \\|\\  \\       \\|___ \\  \\_\\ \\   __/|   \\ \\  \\/  / ||___ \\  \\_| \n");
+            printf(" \\ \\  \\_|/_\\ \\  \\\\ \\  \\   \\ \\  \\ \\ \\  \\_|/_\\ \\   _  _\\           \\ \\  \\ \\ \\  \\_|/__  \\ \\    / /     \\ \\  \\  \n");
+            printf("  \\ \\  \\_|\\ \\ \\  \\\\ \\  \\   \\ \\  \\ \\ \\  \\_|\\ \\ \\  \\\\  \\|           \\ \\  \\ \\ \\  \\_|\\ \\  /     \\/       \\ \\  \\ \n");
+            printf("   \\ \\_______\\ \\__\\\\ \\__\\   \\ \\__\\ \\ \\_______\\ \\__\\\\ _\\            \\ \\__\\ \\ \\_______\\/  /\\   \\        \\ \\__\\\n");
+            printf("    \\|_______|\\|__| \\|__|    \\|__|  \\|_______|\\|__|\\|__|            \\|__|  \\|_______/__/ /\\ __\\        \\|__|\n");
+            printf("                                                                                    |__|/ \\|__|             \n");
+            printf("-----------------------------------------[* DIGITE O TEXTO! *]----------------------------------------\n\n");
+            fgets(str_digitada, sizeof(str_digitada), stdin);
+
+            if (modos[0]!=2 && modos[1]!=8){
+                modos[0] -= 1;
+                modos[1] += 1;
+            }else
+                duracao -= 50;  
+
+            if (comparar_string(ptr_resultado, ptr_digitada) == 1){
+                system("cls");
+                score += 1;
+                continuar = 1;
+                printf("          _____          ________  ________  ___  ________   _________            ______      \n");
+                printf("         / __  \\        |\\   __  \\|\\   __  \\|\\  \\|\\   ___  \\|\\___   ___\\      ___|\\___   \\    \n");
+                printf("        |\\/_|\\  \\       \\ \\  \\|\\  \\ \\  \\|\\  \\ \\  \\ \\  \\\\ \\  \\|___ \\  \\_|     |\\__\\|___|\\  \\   \n");
+                printf("        \\|/ \\ \\  \\       \\ \\   ____\\ \\  \\\\\\  \\ \\  \\ \\  \\\\ \\  \\   \\ \\  \\      \\|__|    \\ \\  \\  \n");
+                printf("             \\ \\  \\       \\ \\  \\___|\\ \\  \\\\\\  \\ \\  \\ \\  \\\\ \\  \\   \\ \\  \\         ___  _\\_\\  \\ \n");
+                printf("              \\ \\__\\       \\ \\__\\    \\ \\_______\\ \\__\\ \\__\\\\ \\__\\   \\ \\__\\       |\\__\\|\\______\\\n");
+                printf("               \\|__|        \\|__|     \\|_______|\\|__|\\|__| \\|__|    \\|__|       \\|__|\\|______|\n");
+                printf("---------------------------------------[* PONTUACAO ATUAL: %d *]---------------------------------------\n\n", score);
+                Beep(350, duracao); Beep(400, duracao); Beep(450, duracao);
+                Sleep(1000);
+            }
+            else{ 
+                printf("-------------------------------------------------[ ]: ]-----------------------------------------------\n");
+                printf(" ________  ________  _____ ______   _______           ________  ___      ___ _______   ________     \n");
+                printf("|\\   ____\\|\\   __  \\|\\   _ \\  _   \\|\\  ___ \\         |\\   __  \\|\\  \\    /  /|\\  ___ \\ |\\   __  \\    \n");
+                printf("\\ \\  \\___|\\ \\  \\|\\  \\ \\  \\\\\\__\\ \\  \\ \\   __/|        \\ \\  \\|\\  \\ \\  \\  /  / | \\   __/|\\ \\  \\|\\  \\   \n");
+                printf(" \\ \\  \\  __\\ \\   __  \\ \\  \\\\|__| \\  \\ \\  \\_|/__       \\ \\  \\\\\\  \\ \\  \\/  / / \\ \\  \\_|/_\\ \\   _  _\\  \n");
+                printf("  \\ \\  \\|\\  \\ \\  \\ \\  \\ \\  \\    \\ \\  \\ \\  \\_|\\ \\       \\ \\  \\\\\\  \\ \\    / /   \\ \\  \\_|\\ \\ \\  \\\\  \\| \n");
+                printf("   \\ \\_______\\ \\__\\ \\__\\ \\__\\    \\ \\__\\ \\_______\\       \\ \\_______\\ \\__/ /     \\ \\_______\\ \\__\\\\ _\\ \n");
+                printf("    \\|_______|\\|__|\\|__|\\|__|     \\|__|\\|_______|        \\|_______|\\|__|/       \\|_______|\\|__|\\|__|\n");
+                printf("-----------------------------------------------[* INFOS *]--------------------------------------------\n\n");
+
+                printf("SCORE: %d    TEMPO: %d   QNT_PALAVRAS: %d   ", score, modos[0], modos[1]);
+                if(score < 4)
+                    printf("Habilidade: Iniciante\n");
+                if(score >= 4 && score < 7)
+                    printf("Habilidade: Intermediario\n");
+                if(score >= 7)
+                    printf("\nHabilidade: MESTRE DO TYPEGAME!\n");
+
+                printf("\n----------------------------------------------[* STRINGS *]-------------------------------------------\n\n");
+                printf("String Correta: %s\nSua String: %s\n", str_resultado, str_digitada);
+                printf("---------------------------------------------[* CONTINUE *]-------------------------------------------\n\n");
+                printf("[* SALVAR PONTUACAO: 'p' *]          [* JOGAR NOVAMENTE: 'j' *]          [* SAIR: 's' *]\n");
+                do{
+                    i=1;
+                    scanf("%c", &fim);
+                    fflush(stdin);
+                    if(fim=='s')
+                        return 0;
+                    else if(fim=='j'){
+                        i=0;
+                        continuar=0;
+                        modos[3]=1;
+                        speed=0;
+                        system("cls");
+                    }
+                    else if(fim=='p'){
+                        i=0;
+                    }
+                    else
+                        printf("Opcao invalida, tente novamente!\n");                 
+                }while(i);
+            }
+        }while(continuar);
+    }while(modos[3]==1);
 }
